@@ -156,6 +156,17 @@ def getWorkersInCity():
     except Exception as e:
         return f"An Error Occured: {e}", 500
 
+@app.route('/getWorkersInPincode',methods=['GET'])
+def getWorkersInPincode():
+    pincode = int(request.args['pincode'])
+    labourers = db.collection('labourers')
+    try:
+        all_labourers = [labourer.to_dict() for labourer in labourers.stream() if labourer.to_dict()['pincode'] == pincode]
+        response = jsonify(all_labourers)
+        return response , 200
+    except Exception as e:
+        return f"An Error Occured: {e}", 500
+
 
 if __name__ == '__main__':
     app.run(debug=True,port=3000)
